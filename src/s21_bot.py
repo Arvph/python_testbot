@@ -177,7 +177,7 @@ def main():
     def handle_callback_query(call):
         """Обработчик callback-запросов"""
         chat_id = call.message.chat.id
-        global user_language  # <---- !!!!!!!!!!!!!!!!!!!!!!!!!
+        global user_language 
         if call.data == 'english':
             user_language[chat_id] = 'english'
             bot.send_message(chat_id, "Welcome!")
@@ -186,7 +186,7 @@ def main():
             bot.send_message(chat_id, 'Добро пожаловать!')
         update_file()
 
-        # Убираем inline клавиатуру после выбора языка
+        # Скрытие inline клавиатуры после выбора языка
         bot.edit_message_reply_markup(
             chat_id=chat_id,
             message_id=call.message.message_id,
@@ -206,7 +206,7 @@ def main():
         reply_markup.add(btn1)
 
         if language == 'english':
-            message_text = "if you want get random picture, press the button" 
+            message_text = "if you want to get a random picture, press the button" 
         else:
             message_text = 'Чтобы получить случайное изображение нажмите кнопку'
 
@@ -216,7 +216,11 @@ def main():
             func=lambda message: message.text in ["Мне повезет!", "I'll get lucky!"])
     def handle_random_image(message):
         chat_id = message.chat.id
-        bot.send_message(chat_id, 'Подождите, генерирую картинку...')
+        # bot.send_message(chat_id, 'Подождите, генерирую картинку...')
+        if language == 'english':
+            bot.send_message(chat_id, 'In proccess of pictire generting...')
+        else:
+            bot.send_message(chat_id, 'Подождите, генерирую картинку...')
         get_response_from_stability(bot, chat_id, PROMPT)
 
     @bot.message_handler(content_types=['text'])
